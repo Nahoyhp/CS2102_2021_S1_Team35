@@ -1,0 +1,27 @@
+<!-- Sidebar -->
+<ul class="sidebar navbar-nav">
+	<li class="nav-item active">
+		<a class="nav-link <%= page==="dashboard" ? "active" : "" %>" href="<%= page==="dashboard" ? "#" : "/dashboard" %>">
+			<i class="fas fa-fw fa-address-card"></i>
+			<span><%= firstname %> <%= lastname %></span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link <%= page==="games" ? "active" : "" %>" href="<%= page==="games" ? "#" : "/games" %>">
+			<i class="fas fa-fw fa-dice"></i>
+			<span>Games</span></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link <%= page==="plays" ? "active" : "" %>" href="<%= page==="plays" ? "#" : "/plays" %>">
+			<i class="fas fa-fw fa-trophy"></i>
+			<span>Plays</span></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link <%= page==="test" ? "active" : "" %>" href="<%= page==="test" ? "#" : "/test" %>">
+			<i class="fas fa-fw fa-trophy"></i>
+			<span>Test</span></a>
+	</li>
+	<li class="nav-item">
+		<label>Testing 1 2 3</label>
+	</li>
+</ul>
