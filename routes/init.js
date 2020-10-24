@@ -38,10 +38,13 @@ function initRouter(app) {
 		successRedirect: '/dashboard',
 		failureRedirect: '/'
 	}));
+
+	app.get('/test', passport.authMiddleware(), testPage)
 	
 	/* LOGOUT */
 	app.get('/logout', passport.authMiddleware(), logout);
 }
+
 
 
 // Render Function
@@ -60,6 +63,14 @@ function basic(req, res, page, other) {
 	}
 	res.render(page, info);
 }
+
+function testPage(req, res, next) {
+	var sql_query = 'SELECT * FROM student_info';
+	pool.query(sql_query, (err, data) => {
+		res.render('test', { title: 'Database Connect', data: data.rows });
+	});
+}
+
 function query(req, fld) {
 	return req.query[fld] ? req.query[fld] : '';
 }

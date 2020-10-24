@@ -1,2 +1,2 @@
-# CS2102_2021_S1_Team35
-Project for NUS Y2021/S1 CS2102: Database System.
+# cs2102_ay1819_s2
+CS2102 Database Systems: Introduction to Web Application Development
