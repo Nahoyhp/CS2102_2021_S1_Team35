@@ -1,25 +1,28 @@
-CREATE TABLE pcsadmins (
+CREATE TABLE users (
 email VARCHAR PRIMARY KEY,
 name VARCHAR NOT NULL,
+role ENUM('pcsadmin', 'petowner', 'caretaker') NOT NULL,
 password VARCHAR NOT NULL CHECK (LENGTH(password) >= 8)
+);
+CREATE TABLE pcsadmins (
+email VARCHAR PRIMARY KEY,
+FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
 );
 
 CREATE TABLE petowners (
 email VARCHAR PRIMARY KEY,
-name VARCHAR NOT NULL,
-password VARCHAR NOT NULL CHECK (LENGTH(password) >= 8),
 credit_card VARCHAR(19) CHECK (LENGTH(credit_card) >= 10),
 address VARCHAR NOT NULL,
-postal_code VARCHAR(6) NOT NULL CHECK (LENGTH(postal_code) = 6)
+postal_code VARCHAR(6) NOT NULL CHECK (LENGTH(postal_code) = 6),
+FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
 );
 
 CREATE TABLE caretakers (
 email VARCHAR PRIMARY KEY,
-name VARCHAR NOT NULL,
-password VARCHAR NOT NULL CHECK (LENGTH(password) >= 8),
 address VARCHAR NOT NULL,
 postal_code VARCHAR(6) NOT NULL CHECK (LENGTH(postal_code) = 6),
-current_rating NUMERIC(2, 1) CHECK (current_rating >= 1 AND current_rating <= 5)
+current_rating NUMERIC(2, 1) CHECK (current_rating >= 1 AND current_rating <= 5),
+FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
 );
 
 CREATE TABLE fulltimers (

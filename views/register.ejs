@@ -14,6 +14,7 @@
 
 		<!-- Custom styles for this template-->
 		<link href="stylesheets/index.css" rel="stylesheet">
+		<script src="/public/javascripts/register.js"></script>
   </head>
 	<body class="bg-dark">
 		<div class="container">
@@ -25,22 +26,26 @@
 							<div class="form-row">
 								<div class="col-md-6">
 									<div class="form-label-group">
-										<input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus" name="firstname">
-										<label for="firstName">First name</label>
+										<input type="text" id="name" class="form-control" placeholder="Name" required="required" autofocus="autofocus" name="name">
+										<label for="name">Name</label>
 									</div>
 								</div>
 								<div class="col-md-6">
-									<div class="form-label-group">
-										<input type="text" id="lastName" class="form-control" placeholder="Last name" required="required" name="lastname">
-										<label for="lastName">Last name</label>
-									</div>
+									<div class="form-group">
+									  <select class="form-control" id="role" name="role">
+									    <option>pcsadmin</option>
+									    <option>petowner</option>
+									    <option>caretaker</option>
+									    <option>petowner-caretaker</option>
+									  </select>
+									</div>						
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="form-label-group">
-								<input type="text" id="username" class="form-control" placeholder="Email address" required="required" name="username" pattern="[A-Za-z][A-Za-z0-9_]{2,14}">
-								<label for="username">Meeple ID</label>
+								<input type="text" id="username" class="form-control" placeholder="Email address" required="required" name="username">
+								<label for="username">Email</label>
 							</div>
 						</div>
 						<div class="form-group">
@@ -53,6 +58,26 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="form-group row">
+							<label for="creditcard" class="col-sm-2 col-form-label petowner"><b>Credit Card:</b></label>
+							<div class="col-sm-4 petowner">
+								<input type="text" class="form-control" id="creditcard" placeholder="Credit Card" name="creditcard">
+							</div>
+							<div class="col-sm-4">
+							</div>
+						</div>
+						<div class="form-group row address">
+							<label for="postalcode" class="col-sm-2 col-form-label"><b>Postal Code:</b></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="postalcode" placeholder="Credit Card" name="postalcode">
+							</div>
+							<label for="address" class="col-sm-2 col-form-label"><b>Address</b></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="address" placeholder="Address" name="address">
+							</div>
+						</div>								
+
 						<button class="btn btn-primary btn-block" type="submit">Register</button>
 					</form>
 					<div class="text-center">

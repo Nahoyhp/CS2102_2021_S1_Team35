@@ -48,13 +48,43 @@ function initRouter(app) {
 
 
 // Render Function
-function basic(req, res, page, other) {
+async function basic(req, res, page, other) {
+
+	try{
+		const res1 = await pool.query(sql_query.query.user_info, [req.user.username]);
+	} catch (err) {
+		console.error("Error in retrieving info");
+	}
+
 	var info = {
 		page: page,
 		user: req.user.username,
-		firstname: req.user.firstname,
-		lastname : req.user.lastname,
-		status   : req.user.status,
+		name: req.user.name,
+		role : req.user.role,
+		creditcard : res.rows[0]
+		currentrating : req.user.currentrating,
+		address : req.user.address,
+		postalcode : req.user.postalcode
+	};
+	if(other) {
+		for(var fld in other) {
+			info[fld] = other[fld];
+		}
+	}
+	res.render(page, info);
+}
+
+async function basic_petowner(req, res, page, other) {
+
+	var info = {
+		page: page,
+		user: req.user.username,
+		name: req.user.name,
+		role : req.user.role,
+		creditcard : req.user.creditcard
+		currentrating : req.user.currentrating,
+		address : req.user.address,
+		postalcode : req.user.postalcode
 	};
 	if(other) {
 		for(var fld in other) {
@@ -127,7 +157,7 @@ function search(req, res, next) {
 }
 function dashboard(req, res, next) {
 	basic(req, res, 'dashboard', { info_msg: msg(req, 'info', 'Information updated successfully', 'Error in updating information'), pass_msg: msg(req, 'pass', 'Password updated successfully', 'Error in updating password'), auth: true });
-}
+
 function games(req, res, next) {
 	var ctx = 0, avg = 0, tbl;
 	pool.query(sql_query.query.avg_rating, [req.user.username], (err, data) => {
@@ -181,9 +211,9 @@ function retrieve(req, res, next) {
 
 // POST 
 function update_info(req, res, next) {
+	var role = req.user.role
 	var username  = req.user.username;
-	var firstname = req.body.firstname;
-	var lastname  = req.body.lastname;
+	var name = req.name;
 	pool.query(sql_query.query.update_info, [username, firstname, lastname], (err, data) => {
 		if(err) {
 			console.error("Error in update info");
@@ -238,31 +268,51 @@ function add_play(req, res, next) {
 	});
 }
 
-function reg_user(req, res, next) {
+async function reg_user(req, res, next) {
 	var username  = req.body.username;
 	var password  = bcrypt.hashSync(req.body.password, salt);
-	var firstname = req.body.firstname;
-	var lastname  = req.body.lastname;
-	pool.query(sql_query.query.add_user, [username,password,firstname,lastname], (err, data) => {
-		if(err) {
-			console.error("Error in adding user", err);
-			res.redirect('/register?reg=fail');
-		} else {
-			req.login({
+	var name = req.body.name;
+	var role  = req.body.role;
+	const client = await pool.connect()
+
+	try {
+		await client.query('BEGIN')
+		const res1 = await client.query(sql_query.query.add_user, [username,password,name,role]);
+		// If no error add info into respective groups
+		if (role == 'petowner' || role == 'petowner-caretaker') {
+			var creditcard = req.body.creditcard;
+			var address = req.body.address;
+			var postalcode = req.body.postalcode;
+
+			const res2 = await client.query(sql_query.query.add_petowner, [username,creditcard,address,postalcode]);
+		}
+		if (role == 'caretaker' || role == 'petowner-caretaker') {
+			var address = req.body.address;
+			var postalcode = req.body.postalcode;
+
+			const res3 = await client.query(sql_query.query.add_caretaker, [username,address,postalcode]);
+		}
+		await client.query('COMMIT')
+	} catch (err) {
+		await client.query('ROLLBACK')		
+		console.error("Error in adding user", err);
+		res.redirect('/register?reg=fail');			
+	} finally {
+		client.release();
+	}
+	
+	req.login({
 				username    : username,
 				passwordHash: password,
-				firstname   : firstname,
-				lastname    : lastname,
-				status      : 'Bronze'
+				name   : name,
+				role    : role,
 			}, function(err) {
 				if(err) {
 					return res.redirect('/register?reg=fail');
 				} else {
 					return res.redirect('/dashboard');
 				}
-			});
-		}
-	});
+			});	
 }
 
 
