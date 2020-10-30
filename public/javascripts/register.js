@@ -3,7 +3,7 @@ $(document).ready(function(){
   $(".address").hide();  
 })
 
-$('select').on('change', function() {
+$('#role').on('change', function() {
   var role =  this.value ;
   if (role == "petowner"){ 
   	$(".petowner").show();

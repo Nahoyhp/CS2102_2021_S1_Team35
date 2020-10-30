@@ -14,7 +14,7 @@ sql.query = {
 	all_plays: 'SELECT gamename AS game, user1, user2, winner FROM game_plays WHERE user1=$1 OR user2=$1',
 	user_info: 'SELECT * FROM (users natural left join petowners) natural left join caretakers where email=$1',
 	user_info_po: 'SELECT * FROM users natural left join petowners where email=$1',
-	user_info_ct: 'SELECT * FROM users natural left join caretakers where email=$1',
+	user_info_ct: 'SELECT * FROM users natural left join caretakers natural left join parttimers where email=$1',
 
 	// Insertion
 	add_game: 'INSERT INTO user_games (username, gamename) VALUES($1,$2)',
@@ -22,6 +22,8 @@ sql.query = {
 	add_petowner: 'INSERT INTO petowners (email, credit_card, address, postal_code) VALUES ($1,$2,$3,$4)',
 	add_caretaker: 'INSERT INTO caretakers (email, current_rating, address, postal_code) VALUES ($1,1,$2,$3)',
 	add_user: 'INSERT INTO users (email, password, name, role) VALUES ($1,$2,$3,$4)',
+	add_fulltimer: 'insert into fulltimers (email) values ($1)',
+	add_parttimer: 'insert into parttimers (email, pet_limit) values ($1, $2)',
 	// Login
 	userpass: 'SELECT * FROM users WHERE email=$1',
 	

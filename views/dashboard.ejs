@@ -75,7 +75,7 @@
 									<div class="form-group row">
 										<label for="currentrating" class="col-sm-2 col-form-label"><b>Current Rating:</b></label>
 										<div class="col-sm-4">
-											<input type="text" required="required" class="form-control-plaintext" id="currentrating" placeholder="Current Rating" name="currentrating" value="<%= currentrating %>">
+											<input type="text" required="required" readonly class="form-control-plaintext" id="currentrating" placeholder="Current Rating" name="currentrating" value="<%= currentrating %>">
 										</div>
 										<label for="role" class="col-sm-2 col-form-label"><b>Address</b></label>
 										<div class="col-sm-4">
@@ -87,7 +87,9 @@
 										<div class="col-sm-4">
 											<input type="text" required="required" class="form-control" id="postalcode" placeholder="Credit Card" name="postalcode" value="<%= postalcode %>">
 										</div>
+										<label for="petlimit" class="col-sm-2 col-form-label"><b>Pet Limit:</b></label>
 										<div class="col-sm-4">
+											<input type="text" required="required" readonly class="form-control-plaintext" id="petlimit" placeholder="5" name="petlimit" value="<%= petlimit %>">
 										</div>
 									</div>	
 								<% } %>		

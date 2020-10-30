@@ -77,7 +77,8 @@ async function basic(req, res, page, other) {
 		creditcard : row.credit_card==undefined?null:row.credit_card,
 		currentrating : row.current_rating==undefined?null:row.current_rating,
 		address : row.address==undefined?null:row.address,
-		postalcode : row.postal_code==undefined?null:row.postal_code
+		postalcode : row.postal_code==undefined?null:row.postal_code,
+		petlimit : row.pet_limit==undefined	?null:row.pet_limit
 	};
 	if(other) {
 		for(var fld in other) {
@@ -301,8 +302,14 @@ async function reg_user(req, res, next) {
 		if (role == 'caretaker' || role == 'petowner-caretaker') {
 			var address = req.body.address;
 			var postalcode = req.body.postalcode;
-
+			var status = req.body.status
 			const res3 = await client.query(sql_query.query.add_caretaker, [username,address,postalcode]);
+			if (status == "fulltimer") {
+				await client.query(sql_query.query.add_fulltimer, [username]);
+			} else {
+				await client.query(sql_query.query.add_parttimer, [username, 2]);
+			}
+			
 		}
 		await client.query('COMMIT')
 	} catch (err) {
