@@ -45,46 +45,39 @@ function initRouter(app) {
 	app.get('/logout', passport.authMiddleware(), logout);
 }
 
-
+function get_col(name, value, row) {
+	i = name.indexOf(value);
+	return i==-1?null:row[i];
+}
 
 // Render Function
 async function basic(req, res, page, other) {
-
+	var res1;
+	var role = req.user.role;
 	try{
-		const res1 = await pool.query(sql_query.query.user_info, [req.user.username]);
+		if (role=="petowner") {
+			res1 = await pool.query(sql_query.query.user_info_po, [req.user.username]);
+		} else if (role=="caretaker") {
+			res1 = await pool.query(sql_query.query.user_info_ct, [req.user.username]);
+		} else {
+			res1 = await pool.query(sql_query.query.user_info, [req.user.username]);
+		}
 	} catch (err) {
 		console.error("Error in retrieving info");
 	}
-
+	var names = res1.fields.map(field => field.name);
+	var row = res1.rows[0];
+	console.log(res1.rows[0]);
 	var info = {
 		page: page,
 		user: req.user.username,
 		name: req.user.name,
 		role : req.user.role,
-		creditcard : res.rows[0]
-		currentrating : req.user.currentrating,
-		address : req.user.address,
-		postalcode : req.user.postalcode
-	};
-	if(other) {
-		for(var fld in other) {
-			info[fld] = other[fld];
-		}
-	}
-	res.render(page, info);
-}
 
-async function basic_petowner(req, res, page, other) {
-
-	var info = {
-		page: page,
-		user: req.user.username,
-		name: req.user.name,
-		role : req.user.role,
-		creditcard : req.user.creditcard
-		currentrating : req.user.currentrating,
-		address : req.user.address,
-		postalcode : req.user.postalcode
+		creditcard : row.credit_card==undefined?null:row.credit_card,
+		currentrating : row.current_rating==undefined?null:row.current_rating,
+		address : row.address==undefined?null:row.address,
+		postalcode : row.postal_code==undefined?null:row.postal_code
 	};
 	if(other) {
 		for(var fld in other) {
@@ -157,7 +150,7 @@ function search(req, res, next) {
 }
 function dashboard(req, res, next) {
 	basic(req, res, 'dashboard', { info_msg: msg(req, 'info', 'Information updated successfully', 'Error in updating information'), pass_msg: msg(req, 'pass', 'Password updated successfully', 'Error in updating password'), auth: true });
-
+}
 function games(req, res, next) {
 	var ctx = 0, avg = 0, tbl;
 	pool.query(sql_query.query.avg_rating, [req.user.username], (err, data) => {
@@ -210,18 +203,37 @@ function retrieve(req, res, next) {
 
 
 // POST 
-function update_info(req, res, next) {
+async function update_info(req, res, next) {
+	// console.log(req.body);
 	var role = req.user.role
 	var username  = req.user.username;
-	var name = req.name;
-	pool.query(sql_query.query.update_info, [username, firstname, lastname], (err, data) => {
-		if(err) {
-			console.error("Error in update info");
-			res.redirect('/dashboard?info=fail');
-		} else {
-			res.redirect('/dashboard?info=pass');
+	var name = req.body.name;
+	var creditcard = req.body.creditcard;
+	var address = req.body.address;
+	var postalcode = req.body.postalcode;
+
+	const client = await pool.connect();
+	try {
+		await client.query('BEGIN')
+		await client.query(sql_query.query.update_info, [username, name]);
+		if(role=="petowner" || role=="petowner-caretaker") {
+			await client.query(sql_query.query.update_petowner_info, [username, creditcard, address, postalcode]);
 		}
-	});
+		
+		if(role=="caretaker" || role=="petowner-caretaker") {
+			await client.query(sql_query.query.update_caretaker_info, [username, address, postalcode]);
+		}
+		
+		await client.query('COMMIT')
+	} catch(err){
+		await client.query('ROLLBACK')
+		console.log(err)
+		console.error("Error in update info");
+		res.redirect('/dashboard?info=fail');
+	} finally {
+		client.release();
+	}
+	res.redirect('/dashboard?info=pass');
 }
 function update_pass(req, res, next) {
 	var username = req.user.username;
@@ -301,7 +313,7 @@ async function reg_user(req, res, next) {
 		client.release();
 	}
 	
-	req.login({
+	await req.login({
 				username    : username,
 				passwordHash: password,
 				name   : name,
