@@ -60,13 +60,15 @@ price NUMERIC NOT NULL,
 PRIMARY KEY (email, category)
 );
 
+CREATE TYPE transfermode AS ENUM ('deliver', 'pickup', 'thruPCS');
+
 CREATE table bids (
 oemail VARCHAR NOT NULL,
 pname VARCHAR NOT NULL,
 cemail VARCHAR NOT NULL REFERENCES caretakers(email),
 service_daterange DATERANGE NOT NULL,
 total_cost NUMERIC NOT NULL,
-transfer_mode VARCHAR NOT NULL,
+transfer_mode transfermode NOT NULL,
 payment_mode VARCHAR NOT NULL,
 rating NUMERIC(2, 1) CHECK (rating >= 1 AND rating <= 5),
 review VARCHAR,
