@@ -12,6 +12,8 @@ sql.query = {
 	ctx_games: 'SELECT COUNT(*) FROM game_list',
 	all_pets: 'SELECT * FROM ownedpets WHERE email = $1',
 	all_availability: 'SELECT * from availability WHERE email=$1',
+	all_bids_po: 'SELECT * FROM bids where oemail=$1',
+	all_bids: 'SELECT * FROM bids',
 	user_info: 'SELECT * FROM (users natural left join petowners) natural left join caretakers where email=$1',
 	user_info_po: 'SELECT * FROM users natural left join petowners where email=$1',
 	user_info_ct: 'SELECT * FROM users natural left join caretakers natural left join parttimers where email=$1',

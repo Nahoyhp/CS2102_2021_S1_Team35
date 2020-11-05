@@ -21,11 +21,12 @@ function initRouter(app) {
 	app.get('/dashboard', passport.authMiddleware(), dashboard);
 	app.get('/pets'    , passport.authMiddleware(), pets    );
 	app.get('/availability'    , passport.authMiddleware(), availability    );
-	app.get('/bids', passport.authMiddleware(), pets); //Change to bids method
+	app.get('/bids', passport.authMiddleware(), bids); //Change to bids method
 	
 	app.get('/register' , passport.antiMiddleware(), register );
 	app.get('/password' , passport.antiMiddleware(), retrieve );
-	
+	app.get('/test', passport.authMiddleware(), pets)
+
 	/* PROTECTED POST */
 	app.post('/update_info', passport.authMiddleware(), update_info);
 	app.post('/update_pass', passport.authMiddleware(), update_pass);
@@ -39,8 +40,6 @@ function initRouter(app) {
 		successRedirect: '/dashboard',
 		failureRedirect: '/'
 	}));
-
-	app.get('/test', passport.authMiddleware(), testPage)
 	
 	/* LOGOUT */
 	app.get('/logout', passport.authMiddleware(), logout);
@@ -87,13 +86,6 @@ async function basic(req, res, page, other) {
 		}
 	}
 	res.render(page, info);
-}
-
-function testPage(req, res, next) {
-	var sql_query = 'SELECT * FROM student_info';
-	pool.query(sql_query, (err, data) => {
-		res.render('test', { title: 'Database Connect', data: data.rows });
-	});
 }
 
 function query(req, fld) {
@@ -175,6 +167,32 @@ function availability(req, res, next) {
 		basic(req, res, 'availability', {tbl: tbl, play_msg: msg(req, 'add', 'Availability added successfully', 'Invalid parameter in availability'), auth: true });
 
 	});
+}
+
+function bids(req, res, next) {
+	var tbl, email=req.user.username, role=req.user.role;
+	if(role=="petowner") {
+		pool.query(sql_query.query.all_bids_po, [email], (err, data)=>{
+			if(err || !data.rows || data.rows.length == 0) {
+				console.log(err)
+				tbl=[]
+			} else {
+				tbl = data.rows;
+			}
+			basic(req, res, 'bids', {tbl: tbl, play_msg: msg(req, 'add', 'Bid added successfully', 'Invalid parameter in bid'), auth: true });
+		});
+	} else {
+		pool.query(sql_query.query.all_bids, (err, data)=>{
+			if(err || !data.rows || data.rows.length == 0) {
+				console.log(err)
+				tbl=[]
+			} else {
+				tbl = data.rows;
+			}
+			basic(req, res, 'bids', {tbl: tbl, play_msg: msg(req, 'add', 'Bid added successfully', 'Invalid parameter in bid'), auth: true });
+		});
+	}
+
 }
 
 function register(req, res, next) {
