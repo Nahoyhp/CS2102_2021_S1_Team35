@@ -21,17 +21,18 @@ function initRouter(app) {
 	app.get('/dashboard', passport.authMiddleware(), dashboard);
 	app.get('/pets'    , passport.authMiddleware(), pets    );
 	app.get('/availability'    , passport.authMiddleware(), availability    );
-	app.get('/bids', passport.authMiddleware(), bids); //Change to bids method
+	app.get('/bids', passport.authMiddleware(), bids);
 	
 	app.get('/register' , passport.antiMiddleware(), register );
 	app.get('/password' , passport.antiMiddleware(), retrieve );
-	app.get('/test', passport.authMiddleware(), pets)
+	app.get('/records', passport.authMiddleware(), records);
+	app.get('/services', passport.authMiddleware(), services);
 
 	/* PROTECTED POST */
 	app.post('/update_info', passport.authMiddleware(), update_info);
 	app.post('/update_pass', passport.authMiddleware(), update_pass);
 	app.post('/add_pet'   , passport.authMiddleware(), add_pet   );
-	app.post('/add_availability'   , passport.authMiddleware(), add_availability); //Change to add availability
+	app.post('/add_availability'   , passport.authMiddleware(), add_availability);
 	
 	app.post('/reg_user'   , passport.antiMiddleware(), reg_user   );
 
@@ -156,6 +157,61 @@ function pets(req, res, next) {
 		basic(req, res, 'pets', {tbl: tbl, game_msg: msg(req, 'add', 'Pet added successfully', 'Pet does not exist'), auth: true });
 	});
 }
+async function services(req, res, next) {
+	var ct_tbl, all_tbl, email=req.user.username, role=req.user.role;
+	const client = await pool.connect();
+
+	try {
+		await client.query('BEGIN')
+		var ct_data, all_data;
+		if (role=="pcsadmin") {
+			ct_data = await client.query(sql_query.query.all_services);
+		} else {
+			ct_data = await client.query(sql_query.query.all_services_ct, [req.user.username]);
+		}
+
+		all_data = await client.query(sql_query.query.all_services_av);
+
+		if(!ct_data.rows || ct_data.rows.length == 0 || !all_data.rows || all_data.rows.length == 0) {				
+			ct_tbl=[]
+			all_tbl=[]
+		} else {
+			ct_tbl = ct_data.rows;
+			all_tbl = all_data.rows;
+		}
+		await client.query('COMMIT')
+	} catch(err){
+		await client.query('ROLLBACK')
+		console.log(err)
+		all_tbl=[]
+		ct_tbl=[]
+	} finally {
+		client.release();
+		basic(req, res, 'services', {all_tbl: all_tbl, ct_tbl:ct_tbl, game_msg: msg(req, 'add', 'Pet added successfully', 'Pet does not exist'), auth: true });
+	}
+}
+function records(req, res, next) {
+	var tbl, email=req.user.username, role = req.user.role;
+	if (role=="pcsadmin") {
+		pool.query(sql_query.query.all_records, (err, data) => {
+			if(err || !data.rows || data.rows.length == 0) {
+				tbl = []
+			} else {
+				tbl = data.rows
+			}
+			basic(req, res, 'records', {tbl: tbl, game_msg: msg(req, 'add', 'Pet added successfully', 'Pet does not exist'), auth: true });
+		});
+	} else {
+		pool.query(sql_query.query.all_records_ct, [req.user.username], (err, data) => {
+			if(err || !data.rows || data.rows.length == 0) {
+				tbl = []
+			} else {
+				tbl = data.rows
+			}
+			basic(req, res, 'records', {tbl: tbl, game_msg: msg(req, 'add', 'Pet added successfully', 'Pet does not exist'), auth: true });
+		});
+	}
+}
 function availability(req, res, next) {
 	var tbl, email=req.user.username;
 	pool.query(sql_query.query.all_availability, [email], (err, data)=>{
@@ -169,30 +225,44 @@ function availability(req, res, next) {
 	});
 }
 
-function bids(req, res, next) {
-	var tbl, email=req.user.username, role=req.user.role;
-	if(role=="petowner") {
-		pool.query(sql_query.query.all_bids_po, [email], (err, data)=>{
-			if(err || !data.rows || data.rows.length == 0) {
-				console.log(err)
-				tbl=[]
-			} else {
-				tbl = data.rows;
-			}
-			basic(req, res, 'bids', {tbl: tbl, play_msg: msg(req, 'add', 'Bid added successfully', 'Invalid parameter in bid'), auth: true });
-		});
-	} else {
-		pool.query(sql_query.query.all_bids, (err, data)=>{
-			if(err || !data.rows || data.rows.length == 0) {
-				console.log(err)
-				tbl=[]
-			} else {
-				tbl = data.rows;
-			}
-			basic(req, res, 'bids', {tbl: tbl, play_msg: msg(req, 'add', 'Bid added successfully', 'Invalid parameter in bid'), auth: true });
-		});
-	}
+async function bids(req, res, next) {
+	var bids_tbl, ct_tbl, email=req.user.username, role=req.user.role;
+	const client = await pool.connect();
 
+	try {
+		await client.query('BEGIN')
+		var bids_data;
+		if(role=="petowner"){
+			bids_data = await client.query(sql_query.query.all_bids_po, [email]);
+		} else {
+			bids_data = await client.query(sql_query.query.all_bids);
+		}
+
+		if(!bids_data.rows || bids_data.rows.length == 0) {				
+			bids_tbl=[]
+		} else {
+			bids_tbl = bids_data.rows;
+		}
+
+		var ct_data;
+		ct_data = await client.query(sql_query.query.all_ct);
+
+		if(!ct_data.rows || ct_data.rows.length == 0) {				
+			ct_tbl=[]
+		} else {
+			ct_tbl = ct_data.rows;
+		}
+
+		await client.query('COMMIT')
+	} catch(err){
+		await client.query('ROLLBACK')
+		console.log(err)
+		bids_tbl=[]
+		ct_tbl=[]
+	} finally {
+		client.release();
+		basic(req, res, 'bids', {bids_tbl: bids_tbl, ct_tbl:ct_tbl, play_msg: msg(req, 'add', 'Bid added successfully', 'Invalid parameter in bid'), auth: true });
+	}
 }
 
 function register(req, res, next) {

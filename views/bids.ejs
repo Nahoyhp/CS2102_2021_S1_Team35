@@ -14,6 +14,7 @@
 
 		<!-- Custom styles for this template-->
 		<link href="stylesheets/index.css" rel="stylesheet">
+		<script src="/public/javascripts/bids.js"></script>
   </head>
 	<body id="page-top">
 		<%- include navbar.ejs %>
@@ -31,7 +32,7 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-bordered bidslist" id="dataTable" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th>oemail</th>
@@ -47,18 +48,18 @@
 										</tr>
 									</thead>
 									<tbody>
-										<% for(var i=0; i<tbl.length; i++) { %>
+										<% for(var i=0; i<bids_tbl.length; i++) { %>
 										<tr>
-											<td><%= tbl[i].oemail%></td>
-											<td><%= tbl[i].pname%></td>
-											<td><%= tbl[i].cemail%></td>
-											<td><%= tbl[i].service_daterange%></td>
-											<td><%= tbl[i].total_cost%></td>
-											<td><%= tbl[i].transfer_mode%></td>
-											<td><%= tbl[i].payment_mode%></td>
-											<td><%= tbl[i].rating%></td>
-											<td><%= tbl[i].review%></td>
-											<td><%= tbl[i].successful%></td>
+											<td><%= bids_tbl[i].oemail%></td>
+											<td><%= bids_tbl[i].pname%></td>
+											<td><%= bids_tbl[i].cemail%></td>
+											<td><%= bids_tbl[i].service_daterange%></td>
+											<td><%= bids_tbl[i].total_cost%></td>
+											<td><%= bids_tbl[i].transfer_mode%></td>
+											<td><%= bids_tbl[i].payment_mode%></td>
+											<td><%= bids_tbl[i].rating%></td>
+											<td><%= bids_tbl[i].review%></td>
+											<td><%= bids_tbl[i].successful%></td>
 										</tr>
 										<% } %>
 									</tbody>
@@ -71,38 +72,26 @@
 
 					<div class="card mb-3">
 						<div class="card-header">
-							<i class="fas fa-trophy"></i> &nbsp; TODO Caretaker List
+							<i class="fas fa-trophy"></i> &nbsp; Caretaker List
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 									<thead>
 										<tr>
-											<th>oemail</th>
-											<th>pname</th>
-											<th>cemail</th>
-											<th>service_daterange</th>
-											<th>total_cost</th>
-											<th>transfer_mode</th>
-											<th>payment_mode</th>
-											<th>rating</th>
-											<th>review</th>
-											<th>successful</th>
+											<th>Email</th>
+											<th>Address</th>
+											<th>Postal Code</th>
+											<th>Current Rating</th>
 										</tr>
 									</thead>
 									<tbody>
-										<% for(var i=0; i<tbl.length; i++) { %>
+										<% for(var i=0; i<ct_tbl.length; i++) { %>
 										<tr>
-											<td><%= tbl[i].oemail%></td>
-											<td><%= tbl[i].pname%></td>
-											<td><%= tbl[i].cemail%></td>
-											<td><%= tbl[i].service_daterange%></td>
-											<td><%= tbl[i].total_cost%></td>
-											<td><%= tbl[i].transfer_mode%></td>
-											<td><%= tbl[i].payment_mode%></td>
-											<td><%= tbl[i].rating%></td>
-											<td><%= tbl[i].review%></td>
-											<td><%= tbl[i].successful%></td>
+											<td><%= ct_tbl[i].email%></td>
+											<td><%= ct_tbl[i].address%></td>
+											<td><%= ct_tbl[i].postal_code%></td>
+											<td><%= ct_tbl[i].current_rating%></td>
 										</tr>
 										<% } %>
 									</tbody>
