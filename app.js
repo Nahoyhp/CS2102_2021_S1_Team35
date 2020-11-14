@@ -19,10 +19,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 // Authentication Setup
-// require('dotenv').load();
+require('dotenv').load();
 require('./auth').init(app);
 app.use(session({
-  //secret: process.env.SECRET,
+  secret: process.env.SECRET,
   secret: 'Secret Cat',
   resave: true,
   saveUninitialized: true
