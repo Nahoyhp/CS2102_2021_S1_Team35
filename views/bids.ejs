@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Meeple World</title>
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template-->
+		<link href="stylesheets/index.css" rel="stylesheet">
+		<script src="/public/javascripts/bids.js"></script>
+  </head>
+	<body id="page-top">
+		<%- include navbar.ejs %>
+		
+		<div id="wrapper">
+			<%- include sidebar.ejs %>
+			
+			<div id="content-wrapper">
+				<div class="container-fluid">
+					<%- include name.ejs %>
+					
+					<div class="card mb-3">
+						<div class="card-header">
+							<i class="fas fa-trophy"></i> &nbsp; Bids List
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered bidslist" id="dataTable" width="100%" cellspacing="0">
+									<thead>
+										<tr>
+											<th>oemail</th>
+											<th>pname</th>
+											<th>cemail</th>
+											<th>service_daterange</th>
+											<th>total_cost</th>
+											<th>transfer_mode</th>
+											<th>payment_mode</th>
+											<th>rating</th>
+											<th>review</th>
+											<th>successful</th>
+										</tr>
+									</thead>
+									<tbody>
+										<% for(var i=0; i<bids_tbl.length; i++) { %>
+										<tr>
+											<td><%= bids_tbl[i].oemail%></td>
+											<td><%= bids_tbl[i].pname%></td>
+											<td><%= bids_tbl[i].cemail%></td>
+											<td><%= bids_tbl[i].service_daterange%></td>
+											<td><%= bids_tbl[i].total_cost%></td>
+											<td><%= bids_tbl[i].transfer_mode%></td>
+											<td><%= bids_tbl[i].payment_mode%></td>
+											<td><%= bids_tbl[i].rating%></td>
+											<td><%= bids_tbl[i].review%></td>
+											<td><%= bids_tbl[i].successful%></td>
+										</tr>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-footer small text-muted"><span class="badge badge-pill badge-info"><%= play_msg %></span></div>
+					</div>
+
+
+					<div class="card mb-3">
+						<div class="card-header">
+							<i class="fas fa-trophy"></i> &nbsp; Caretaker List
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+									<thead>
+										<tr>
+											<th>Email</th>
+											<th>Address</th>
+											<th>Postal Code</th>
+											<th>Current Rating</th>
+										</tr>
+									</thead>
+									<tbody>
+										<% for(var i=0; i<ct_tbl.length; i++) { %>
+										<tr>
+											<td><%= ct_tbl[i].email%></td>
+											<td><%= ct_tbl[i].address%></td>
+											<td><%= ct_tbl[i].postal_code%></td>
+											<td><%= ct_tbl[i].current_rating%></td>
+										</tr>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-footer small text-muted"><span class="badge badge-pill badge-info"><%= play_msg %></span></div>
+					</div>
+
+
+					
+					<div class="card mb-3">
+						<div class="card-header">
+							<i class="fas fa-dice-six"></i> &nbsp; TODO Add bid
+						</div>
+						<form method="post" action="/add_availability">
+							<div class="card-body">
+								<div class="form-group row">
+									<label for="username" class="col-sm-2 col-form-label"><b>Meeple ID:</b></label>
+									<div class="col-sm-10">
+										<input type="text" required="required" readonly class="form-control-plaintext" id="username" value="<%= user %>" name="username">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="from" class="col-sm-2 col-form-label"><b>From:</b></label>
+									<div class="col-sm-4">
+										<input type="text" required="required" class="form-control" id="From" placeholder="YYYY-MM-DD" name="from" value="">
+									</div>
+
+									<label for="to" class="col-sm-2 col-form-label"><b>To:</b></label>
+									<div class="col-sm-4">
+										<input type="text" required="required" class="form-control" id="to" placeholder="YYYY-MM-DD" name="to" value="">
+									</div>									
+								</div>
+
+							</div>
+							<div class="card-footer small text-muted"><button type="submit" class="btn btn-secondary">Add Availability</button></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include bottomscript.ejs %>
+  </body>
+</html>

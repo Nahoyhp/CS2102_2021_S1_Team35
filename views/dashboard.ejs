@@ -32,25 +32,89 @@
 						<form method="post" action="/update_info">
 							<div class="card-body">
 								<div class="form-group row">
-									<label for="username" class="col-sm-2 col-form-label"><b>Meeple ID:</b></label>
+									<label for="username" class="col-sm-2 col-form-label"><b>Email: </b></label>
 									<div class="col-sm-4">
 										<input type="text" required="required" readonly class="form-control-plaintext" id="username" value="<%= user %>" name="username">
 									</div>
-									<label for="status" class="col-sm-2 col-form-label"><b>Type:</b></label>
+									<label for="status" class="col-sm-2 col-form-label"><b>Role:</b></label>
 									<div class="col-sm-4">
-										<input type="text" required="required" readonly class="form-control-plaintext" id="status" value="<%= status %>" name="status">
+										<input type="text" required="required" readonly class="form-control-plaintext" id="role" value="<%= role %>" name="role">
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="firstname" class="col-sm-2 col-form-label"><b>First:</b></label>
+									<label for="name" class="col-sm-2 col-form-label"><b>Name:</b></label>
 									<div class="col-sm-4">
-										<input type="text" required="required" class="form-control" id="firstname" placeholder="First Name" name="firstname" value="<%= firstname %>">
+										<input type="text" required="required" class="form-control" id="name" placeholder="Name" name="name" value="<%= name %>">
 									</div>
-									<label for="lastname" class="col-sm-2 col-form-label"><b>Last:</b></label>
 									<div class="col-sm-4">
-										<input type="text" required="required" class="form-control" id="lastname" placeholder="Last Name" name="lastname" value="<%= lastname %>">
 									</div>
 								</div>
+
+								<% if(role=="petowner") { %>
+									<div class="form-group row">
+										<label for="creditcard" class="col-sm-2 col-form-label"><b>Credit Card:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="creditcard" placeholder="Credit Card" name="creditcard" value="<%= creditcard %>">
+										</div>
+										<label for="role" class="col-sm-2 col-form-label"><b>Address</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="address" placeholder="Address" name="address" value="<%= address %>">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="postalcode" class="col-sm-2 col-form-label"><b>Postal Code:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="postalcode" placeholder="Credit Card" name="postalcode" value="<%= postalcode %>">
+										</div>
+										<div class="col-sm-4">
+										</div>
+									</div>								
+								<% } %>
+
+								<% if(role=="caretaker") { %>
+									<div class="form-group row">
+										<label for="currentrating" class="col-sm-2 col-form-label"><b>Current Rating:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" readonly class="form-control-plaintext" id="currentrating" placeholder="Current Rating" name="currentrating" value="<%= currentrating %>">
+										</div>
+										<label for="role" class="col-sm-2 col-form-label"><b>Address</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="address" placeholder="Address" name="address" value="<%= address %>">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="postalcode" class="col-sm-2 col-form-label"><b>Postal Code:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="postalcode" placeholder="Credit Card" name="postalcode" value="<%= postalcode %>">
+										</div>
+										<label for="petlimit" class="col-sm-2 col-form-label"><b>Pet Limit:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" readonly class="form-control-plaintext" id="petlimit" placeholder="5" name="petlimit" value="<%= petlimit %>">
+										</div>
+									</div>	
+								<% } %>		
+								<% if(role=="petowner-caretaker") { %>
+									<div class="form-group row">
+										<label for="currentrating" class="col-sm-2 col-form-label"><b>Current Rating:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control-plaintext" id="currentrating" placeholder="Current Rating" name="currentrating" value="<%= currentrating %>">
+										</div>
+										<label for="role" class="col-sm-2 col-form-label"><b>Address</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="address" placeholder="Address" name="address" value="<%= address %>">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="postalcode" class="col-sm-2 col-form-label"><b>Postal Code:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="postalcode" placeholder="postalcode" name="postalcode" value="<%= postalcode %>">
+										</div>
+										<label for="creditcard" class="col-sm-2 col-form-label"><b>Credit Card:</b></label>
+										<div class="col-sm-4">
+											<input type="text" required="required" class="form-control" id="creditcard" placeholder="Credit Card" name="creditcard" value="<%= creditcard %>">
+										</div>
+									</div>	
+								<% } %>															
 							</div>
 							<div class="card-footer small text-muted"><button type="submit" class="btn btn-secondary">Update Info</button> &nbsp;&nbsp;&nbsp; <span class="badge badge-pill badge-info"><%= info_msg %></span></div>
 						</form>
@@ -67,9 +131,9 @@
 									<div class="col-sm-4">
 										<input type="text" required="required" readonly class="form-control-plaintext" id="username" value="<%= user %>" name="username">
 									</div>
-									<label for="status" class="col-sm-2 col-form-label"><b>Type:</b></label>
+									<label for="status" class="col-sm-2 col-form-label"><b>Role:</b></label>
 									<div class="col-sm-4">
-										<input type="text" required="required" readonly class="form-control-plaintext" id="status" value="<%= status %>" name="status">
+										<input type="text" required="required" readonly class="form-control-plaintext" id="status" value="<%= role %>" name="status">
 									</div>
 								</div>
 								<div class="form-group row">

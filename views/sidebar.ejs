@@ -3,23 +3,33 @@
 	<li class="nav-item active">
 		<a class="nav-link <%= page==="dashboard" ? "active" : "" %>" href="<%= page==="dashboard" ? "#" : "/dashboard" %>">
 			<i class="fas fa-fw fa-address-card"></i>
-			<span><%= firstname %> <%= lastname %></span>
+			<span><%= name %> (<%= role %>)</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link <%= page==="games" ? "active" : "" %>" href="<%= page==="games" ? "#" : "/games" %>">
+		<a class="nav-link <%= page==="pets" ? "active" : "" %>" href="<%= page==="pets" ? "#" : "/pets" %>">
 			<i class="fas fa-fw fa-dice"></i>
-			<span>Games</span></a>
+			<span>Pets</span></a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link <%= page==="plays" ? "active" : "" %>" href="<%= page==="plays" ? "#" : "/plays" %>">
+		<a class="nav-link <%= page==="availability" ? "active" : "" %>" href="<%= page==="availability" ? "#" : "/availability" %>">
 			<i class="fas fa-fw fa-trophy"></i>
-			<span>Plays</span></a>
+			<span>Availability</span></a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link <%= page==="test" ? "active" : "" %>" href="<%= page==="test" ? "#" : "/test" %>">
+		<a class="nav-link <%= page==="bids" ? "active" : "" %>" href="<%= page==="bids" ? "#" : "/bids" %>">
 			<i class="fas fa-fw fa-trophy"></i>
-			<span>Test</span></a>
+			<span>Bids</span></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link <%= page==="records" ? "active" : "" %>" href="<%= page==="records" ? "#" : "/records" %>">
+			<i class="fas fa-fw fa-trophy"></i>
+			<span>Records</span></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link <%= page==="services" ? "active" : "" %>" href="<%= page==="services" ? "#" : "/services" %>">
+			<i class="fas fa-fw fa-trophy"></i>
+			<span>Services</span></a>
 	</li>
 	<li class="nav-item">
 		<label>Testing 1 2 3</label>
