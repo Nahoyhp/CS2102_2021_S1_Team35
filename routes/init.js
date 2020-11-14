@@ -33,6 +33,7 @@ function initRouter(app) {
 	app.post('/update_pass', passport.authMiddleware(), update_pass);
 	app.post('/add_pet'   , passport.authMiddleware(), add_pet   );
 	app.post('/add_availability'   , passport.authMiddleware(), add_availability);
+	app.post('/add_services'	, passport.authMiddleware(), add_services);
 	
 	app.post('/reg_user'   , passport.antiMiddleware(), reg_user   );
 
@@ -317,6 +318,30 @@ function update_pass(req, res, next) {
 			res.redirect('/dashboard?pass=pass');
 		}
 	});
+}
+
+async function add_services(req, res, next) {
+	var email = req.user.username;
+	var category = req.body.category
+	var baseprice = req.body.baseprice
+	var price = req.body.price
+
+	const client = await pool.connect();
+	try {
+		await client.query('BEGIN')
+		await client.query(sql_query.query.add_services, [category, baseprice]);
+		await client.query(sql_query.query.add_provides, [email, category, price]);
+		
+		await client.query('COMMIT')
+	} catch(err){
+		await client.query('ROLLBACK')
+		console.log(err)
+		console.error("Error in adding service");
+		res.redirect('/services?info=fail');
+	} finally {
+		client.release();
+	}
+	res.redirect('/services?info=pass');
 }
 
 function add_pet(req, res, next) {

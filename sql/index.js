@@ -32,6 +32,8 @@ sql.query = {
 	add_user: 'INSERT INTO users (email, password, name, role) VALUES ($1,$2,$3,$4)',
 	add_fulltimer: 'insert into fulltimers (email) values ($1)',
 	add_parttimer: 'insert into parttimers (email, pet_limit) values ($1, $2)',
+	add_services: 'insert into services (category, base_price) values ($1, $2)',
+	add_provides: 'insert into provides (email, category, price) values ($1, $2, $3)',
 	// Login
 	userpass: 'SELECT * FROM users WHERE email=$1',
 	
