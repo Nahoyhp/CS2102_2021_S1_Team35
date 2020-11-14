@@ -85,22 +85,10 @@
 					
 					<div class="card mb-3">
 						<div class="card-header">
-							<i class="fas fa-dice-d20"></i> &nbsp; TODO Add Service
+							<i class="fas fa-dice-d20"></i> &nbsp; Add Service
 						</div>
-						<form method="post" action="/add_pet">
+						<form method="post" action="/add_services">
 							<div class="card-body">
-								<div class="form-group row">
-									<label for="username" class="col-sm-3 col-form-label"><b>Meeple ID:</b></label>
-									<div class="col-sm-9">
-										<input type="text" required="required" readonly class="form-control-plaintext" id="username" value="<%= user %>" name="username">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="petname" class="col-sm-3 col-form-label"><b>Pet Name:</b></label>
-									<div class="col-sm-9">
-										<input type="text" required="required" class="form-control" id="petname" placeholder="Pet Name" name="petname" value="">
-									</div>
-								</div>
 								<div class="form-group row">
 									<label for="category" class="col-sm-3 col-form-label"><b>Category:</b></label>
 									<div class="col-sm-9">
@@ -108,11 +96,17 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="specialneeds" class="col-sm-3 col-form-label"><b>Special Needs:</b></label>
+									<label for="specialneeds" class="col-sm-3 col-form-label"><b>Base Price:</b></label>
 									<div class="col-sm-9">
-										<input type="text" required="required" class="form-control" id="specialneeds" placeholder="Special Needs" name="specialneeds" value="">
+										<input type="text" required="required" class="form-control" id="baseprice" placeholder="Base Price" name="baseprice" value="">
 									</div>
-								</div>																
+								</div>
+								<div class="form-group row">
+									<label for="specialneeds" class="col-sm-3 col-form-label"><b>Price:</b></label>
+									<div class="col-sm-9">
+										<input type="text" required="required" class="form-control" id="price" placeholder="Price" name="price" value="">
+									</div>
+								</div>																								
 							</div>
 							<div class="card-footer small text-muted"><button type="submit" class="btn btn-secondary">Add Pet</button></div>
 						</form>
